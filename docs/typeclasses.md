@@ -117,11 +117,11 @@ The standard example for this would be the `Functor`-`Applicative`-`Monad` hiera
 
 ```scala
 trait Functor[F[_]] {
-  def map[A, B](fa: F[A])(f: A => B): F[B]
+  def map[A, B](this fa: F[A])(f: A => B): F[B]
 }
 
 trait Applicative[F[_]] extends Functor[F] {
-  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B]
+  def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
   def pure[A](a: A): F[A]
 
   override def map[A, B](fa: F[A])(f: A => B): F[B] =
@@ -148,24 +148,24 @@ The following is how default implementations would look like in this proposal:
 
 ```scala
 type class Functor[F[_]] {
-  def map[A, B](fa: F[A])(f: A => B): F[B]
+  def map[A, B](this fa: F[A])(f: A => B): F[B]
 }
 
 type class Applicative[F[_]] : Functor[F] {
-  def ap[A, B](fa: F[A])(ff: F[A => B]): F[B]
+  def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
   def pure[A](a: A): F[A]
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
+  override def map[A, B](this fa: F[A])(f: A => B): F[B] =
     ap(fa)(pure(f))
 }
 
 type class Monad[F[_]] : Applicative[F] {
-  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+  def flatMap[A, B](this fa: F[A])(f: A => F[B]): F[B]
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
+  override def map[A, B](this fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 
-  override def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
+  override def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 }
 ```
