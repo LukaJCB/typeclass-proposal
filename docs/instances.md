@@ -84,7 +84,7 @@ implicit def readerApplicativeFunctor[R]: Applicative[[A] => Reader[R, A]] =
     def pure[A](a: A): Reader[R, A] =
       Reader(_ => a)
 
-    def ap[A, B](this ff: Reader[R, A => B])(fa: Reader[R, A]): Reader[R, B] =
+    def ap[A, B](this fa: Reader[R, A])(ff: Reader[R, A => B]): Reader[R, B] =
       Reader(r => ff.run(r)(fa.run(r)))
   }
 ```

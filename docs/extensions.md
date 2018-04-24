@@ -10,6 +10,7 @@ title: "Extension Methods"
 Extension methods are a great way to add functionality to a type after it's been defined.
 Here is a simple example:
 
+//TODO Rethink the `implicit object`
 ```scala
 implicit object Ops {
   def **(this i: Int)(j: Int): Int = Math.pow(i, j)
