@@ -21,7 +21,6 @@ implicit object Ops {
 
 This adds a simple exponent operator to integers. They should be able to be invoked exactly like calling a method on `Int`.
 We introduce such an extension method by prefixing one of the parameters of the method with `this`.
-The parameter prefixed with `this` must be the only one in its parameter list.
 
 ## Advantages over implicit classes
 
