@@ -49,9 +49,11 @@ def sum[T](list: List[T])(implicit monoidT: Monoid[T]): T =
 ```
 
 
-We could also define the same type class in terms of context bounds as it often done today as well:
+We could also define the same type class in terms of context bounds as it is often done today as well:
 
 ```scala
 def sum[T: Monoid](list: List[T]): T =
   list.foldLeft(Monoid[T].empty)(_ |+| _)
 ```
+
+This would be equivalent to the snippet above.

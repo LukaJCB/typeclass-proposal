@@ -10,9 +10,9 @@ title: "Extension Methods"
 Extension methods are a great way to add functionality to a type after it's been defined.
 Here is a simple example:
 
-//TODO Rethink the `implicit object`
+
 ```scala
-implicit object Ops {
+object Ops
   def **(this i: Int)(j: Int): Int = Math.pow(i, j)
 }
 
@@ -45,7 +45,7 @@ With implicit classes we now need to define three different classes for these fu
 The extension methods proposal would make this definition a lot simpler:
 
 ```scala
-implicit object Traverse {
+object Traverse {
   def traverse[F[_]: Traverse, G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
 
   def sequence[F[_]: Traverse, G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
