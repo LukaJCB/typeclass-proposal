@@ -140,4 +140,27 @@ The compiler can figure out that if `A` has an instance of `Order`, it must also
 
 ## Coherence and multi-param type classes
 
-//TODO
+The instances of Multi parameter type classes have a number of companion objects where their type shows up in the instance declaration.
+This is problematic because it can mess with coherence.
+For an example let's look at the `Collection` type class again:
+
+```scala
+type class Collection[C, E] {
+  def insert(this collection: C)(elem: E): C
+  def contains(this collection: C)(elem: E): Boolean
+}
+```
+
+Now imagine we add an instance of `Collection[String, Char]` inside the `String` companion object.
+Then someone else defines an instance of `Collection[CharList, Char]` in another package where `String` isn't in scope.
+Then, when we try to use both packages together and ask for an instance of `Collection[_, Char]`, the compiler can't know which one we want, thereby breaking coherence.
+
+Other languages overcome this problem with one of two techniques, functional dependencies or associated types.
+Both of these solutions function by introducing a concept of determining a type by another.
+For example, in the `Collection` type class above, the collection type always determines which type of element can be stored inside.
+We say that `E` is uniquely determined by `C`.
+
+
+One compromise without bringing in full on support for functional dependencies could be to let the first parameter of the type class in question determine all other parameters.
+
+//TODO More detail
