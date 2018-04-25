@@ -7,6 +7,7 @@ title: "Translation scheme"
 # Translation scheme
 
 Ideally extension methods and type class instances along with opaque types should be full replacements for value classes and implicit classes.
+Additionally translation schemes can't help us with some of the more advanced requirements in this proposal, like checking that coherence is adhered to.
 Nevertheless it might be useful to look at translation schemes that provide translations from the constructs in this proposal to constructs that exist today.
 
 ## Extension methods
@@ -86,10 +87,19 @@ trait Eq[T] {
 }
 
 object Eq {
-  implicit class Eq===Ops[T](private val x: T) extends AnyVal {
-    def ===(y: T)(implicit ev: Eq[T]): Boolean = ev.eqv(x, y)
+  trait Ops {
+    implicit class Eq===Ops[T](private val x: T) extends AnyVal {
+      def ===(y: T)(implicit ev: Eq[T]): Boolean = ev.eqv(x, y)
+    }
   }
+  object Ops extends Ops
 }
 ```
 
-//TODO this scheme doesn't work if `Eq._` isn't in scope
+### Type class requirements
+
+//TODO
+
+## Instance translations
+
+//TODO

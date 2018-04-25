@@ -41,4 +41,5 @@ The proposal is written up as a list of reference pages:
 2. [Type class definitions](docs/typeclasses.md)
 3. [Instance Declarations](docs/instances.md)
 4. [Type class usage](docs/usage.md)
-5. [Translation Scheme](docs/translations.md)
+5. [Type checking](docs/typechecking.md)
+6. [Translation Scheme](docs/translations.md)
