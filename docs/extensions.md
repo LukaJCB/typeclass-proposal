@@ -16,7 +16,7 @@ object Ops {
   def **(this i: Int)(j: Int): Int = Math.pow(i, j)
 }
 
-//whenever `Ops.**` is in scope
+//whenever `Ops` is in scope
 2 ** 3 == 8
 ```
 

@@ -85,7 +85,11 @@ trait Eq[T] {
   def ===(x: T)(y: T): Boolean = eqv(x, y)
 }
 
-implicit class Eq===Ops[T](private val x: T) extends AnyVal {
-  def ===(y: T)(implicit ev: Eq[T]): Boolean = ev.eqv(x, y)
+object Eq {
+  implicit class Eq===Ops[T](private val x: T) extends AnyVal {
+    def ===(y: T)(implicit ev: Eq[T]): Boolean = ev.eqv(x, y)
+  }
 }
 ```
+
+//TODO this scheme doesn't work if `Eq._` isn't in scope

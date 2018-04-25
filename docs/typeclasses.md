@@ -27,9 +27,7 @@ type class Semigroup[A] {
 }
 
 object Semigroup {
-  implicit object Ops {
-    def combine[A: Semigroup](this x: A)(y: A): A
-  }
+  def combine[A: Semigroup](this x: A)(y: A): A
 }
 ```
 
