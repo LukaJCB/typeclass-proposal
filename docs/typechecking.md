@@ -32,6 +32,6 @@ Furthermore, if there's already an instance of the same type class for the same 
 ### Type class requirements
 
 When defining an instance for a type class which defines type class requirements, the compiler should check if there are instances for all of the type class requirements in scope and otherwise generate an error.
-Additionally if a type class has type class requirements and the type class instance itself has implicit instance dependencies (e.g. `implicit def eqForList[A: Order]: Order[List[A]]`), then the compiler will need to check these dependencies if they fulfill the requirement for other instances that also specify implicit instance dependencies.
+Additionally if a type class has type class requirements and the type class instance itself has implicit instance dependencies (e.g. `extension eqForList[A: Order] = new Order[List[A]]`), then the compiler will need to check these dependencies if they fulfill the requirement for other instances that also specify implicit instance dependencies.
 
 

@@ -13,7 +13,7 @@ Here is a simple example:
 
 ```scala
 object Ops {
-  def **(this i: Int)(j: Int): Int = Math.pow(i, j)
+  extension def **(this i: Int)(j: Int): Int = Math.pow(i, j)
 }
 
 //whenever `Ops.**` is in scope
@@ -47,11 +47,11 @@ The extension methods proposal would make this definition a lot simpler:
 
 ```scala
 object Traverse {
-  def traverse[F[_]: Traverse, G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
+  extension def traverse[F[_]: Traverse, G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
 
-  def sequence[F[_]: Traverse, G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
+  extension def sequence[F[_]: Traverse, G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
 
-  def flatSequence[F[_]: Traverse: FlatMap, G[_], A](this fgfa: F[G[F[A]]]): G[F[A]]
+  extension def flatSequence[F[_]: Traverse: FlatMap, G[_], A](this fgfa: F[G[F[A]]]): G[F[A]]
 }
 ```
 
