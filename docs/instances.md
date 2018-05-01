@@ -9,7 +9,7 @@ Declaring an instance for a type class is done by declaring an extension with a 
 For example, 
 
 ```scala
-extension intAdditionSemigroup = new Semigroup[Int] {
+extension intAdditionSemigroup : new Semigroup[Int] {
   def combine(this x: Int)(y: Int) = x + y
 }
 ````
@@ -18,7 +18,7 @@ This defines a `Semigroup` instance.
 
 
 ```scala
-extension intAdditionMonoid = new Monoid[Int] {
+extension intAdditionMonoid : new Monoid[Int] {
   def empty: Int = 0
 }
 ```
@@ -30,7 +30,7 @@ We can also define type classes inductively, for example an `Option[A]` is a `Se
 
 
 ```scala
-extension optionSemigroup[A: Semigroup] = new Semigroup[Option[A]] {
+extension optionSemigroup[A: Semigroup] : new Semigroup[Option[A]] {
   def combine(this x: Option[A])(y: Option[A]): Option[A] = (x, y) match {
     case (Some(a), Some(b)) => a.combine(b)
     case (_, _) => None
@@ -54,7 +54,7 @@ As an example, this is a valid instance decleration:
 case class Foo[A](a: A, n: Int)
 
 object Foo {
-  extension fooFunctor = new Functor[Foo] {
+  extension fooFunctor : new Functor[Foo] {
     def map[A, B](this fa: Foo[A])(f: A => B): Foo[B] =
       Foo(f(fa.a), fa.n)
   }
@@ -65,7 +65,7 @@ Whereas this one would emit a warning:
 
 ```scala
 object Bar {
-  extension fooFunctor = new Functor[Foo] {
+  extension fooFunctor : new Functor[Foo] {
     def map[A, B](this fa: Foo[A])(f: A => B): Foo[B] =
       Foo(f(fa.a), fa.n)
   }
@@ -78,7 +78,7 @@ object Bar {
 In the last section about defining type classes we spoke briefly about providing default implementations for methods on implied type classes.
 
 ```scala
-extension readerApplicativeFunctor[R] =
+extension readerApplicativeFunctor[R] :
   new Applicative[[A] => Reader[R, A]] with Functor[A] => Reader[R, A]] {
     def pure[A](a: A): Reader[R, A] =
       Reader(_ => a)
@@ -95,12 +95,12 @@ Next we will look at how this scheme will work with types that have type class i
 
 
 ```scala
-extension intOrderEq = new Order[Int] with Eq[Int] {
+extension intOrderEq : new Order[Int] with Eq[Int] {
   def compare(this x: Int)(y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 }
 
-extension intHash = new Hash[Int] {
+extension intHash : new Hash[Int] {
   def hash(this x: Int): Int = x.hashCode()
 }
 ```

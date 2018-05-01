@@ -21,7 +21,7 @@ object Ops {
 ```
 
 This adds a simple exponent operator to integers. They should be able to be invoked exactly like calling a method on `Int`.
-We introduce such an extension method by prefixing one of the parameters of the method with `this`.
+We introduce such an extension method by prefixing a method with `extension` and prefixing one of the parameters of the method with `this`.
 Ideally, these methods should be able to be imported and namespaced like any other definition.
 
 ## Advantages over implicit classes
