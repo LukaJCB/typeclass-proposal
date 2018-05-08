@@ -13,7 +13,7 @@ Here is a simple example:
 
 ```scala
 object Ops {
-  def **(this i: Int)(j: Int): Int = Math.pow(i, j)
+  extension def **(this i: Int)(j: Int): Int = Math.pow(i, j)
 }
 
 //whenever `Ops.**` is in scope
@@ -21,7 +21,7 @@ object Ops {
 ```
 
 This adds a simple exponent operator to integers. They should be able to be invoked exactly like calling a method on `Int`.
-We introduce such an extension method by prefixing one of the parameters of the method with `this`.
+We introduce such an extension method by prefixing a method with `extension` and prefixing one of the parameters of the method with `this`.
 Ideally, these methods should be able to be imported and namespaced like any other definition.
 
 ## Advantages over implicit classes
@@ -47,11 +47,11 @@ The extension methods proposal would make this definition a lot simpler:
 
 ```scala
 object Traverse {
-  def traverse[F[_]: Traverse, G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
+  extension def traverse[F[_]: Traverse, G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
 
-  def sequence[F[_]: Traverse, G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
+  extension def sequence[F[_]: Traverse, G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
 
-  def flatSequence[F[_]: Traverse: FlatMap, G[_], A](this fgfa: F[G[F[A]]]): G[F[A]]
+  extension def flatSequence[F[_]: Traverse: FlatMap, G[_], A](this fgfa: F[G[F[A]]]): G[F[A]]
 }
 ```
 

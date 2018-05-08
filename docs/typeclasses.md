@@ -27,7 +27,7 @@ type class Semigroup[A] {
 }
 
 object Semigroup {
-  def combine[A: Semigroup](this x: A)(y: A): A
+  extension def combine[A: Semigroup](this x: A)(y: A): A
 }
 ```
 
@@ -36,7 +36,7 @@ We should be able to define the syntax right there in the type class declaration
 
 ```scala
 type class Semigroup[A] {
-  def combine(this x: A)(y: A): A
+  extension def combine(this x: A)(y: A): A
 }
 ```
 
@@ -45,11 +45,11 @@ This should also work for the `Traverse` type class we talked about in the prior
 
 ```scala
 type class Traverse[F[_]] {
-  def traverse[G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
+  extension def traverse[G[_]: Applicative, A, B](this fa: F[A])(f: A => G[B]): G[F[B]]
 
-  def sequence[G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
+  extension def sequence[G[_]: Applicative, A](this fga: F[G[A]]): G[F[A]]
 
-  def flatSequence[G[_], A](this fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]]
+  extension def flatSequence[G[_], A](this fgfa: F[G[F[A]]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[A]]
 
   //...
 }
@@ -63,7 +63,7 @@ For example here is the definiton of `Monoid` and `Semigroup` to show this relat
 
 ```scala
 type class Semigroup[A] {
-  def combine(this x: A)(y: A): A
+  extension def combine(this x: A)(y: A): A
 }
 
 type class Monoid[A] : Semigroup[A] {
@@ -78,15 +78,15 @@ This would allows us to have
 
 ```scala
 type class Eq[A] {
-  def ===(this x: A)(y: A): Boolean
+  extension def ===(this x: A)(y: A): Boolean
 }
 
 type class Order[A] : Eq[A] {
-  def compare(this x: A)(y: A): Int
+  extension def compare(this x: A)(y: A): Int
 }
 
 type class Hash[A] : Eq[A] {
-  def hash(this x: A): Int
+  extension def hash(this x: A): Int
 }
 ```
 
@@ -115,24 +115,24 @@ The standard example for this would be the `Functor`-`Applicative`-`Monad` hiera
 
 ```scala
 trait Functor[F[_]] {
-  def map[A, B](this fa: F[A])(f: A => B): F[B]
+  extension def map[A, B](this fa: F[A])(f: A => B): F[B]
 }
 
 trait Applicative[F[_]] extends Functor[F] {
-  def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
+  extension def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
   def pure[A](a: A): F[A]
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
+  override extension def map[A, B](fa: F[A])(f: A => B): F[B] =
     ap(fa)(pure(f))
 }
 
 trait Monad[F[_]] extends Applicative[F] {
-  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+  extension def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
-  override def map[A, B](fa: F[A])(f: A => B): F[B] =
+  override extension def map[A, B](fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 
-  override def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
+  override extension def ap[A, B](fa: F[A])(ff: F[A => B]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 }
 ```
@@ -146,24 +146,24 @@ The following is how default implementations would look like in this proposal:
 
 ```scala
 type class Functor[F[_]] {
-  def map[A, B](this fa: F[A])(f: A => B): F[B]
+  extension def map[A, B](this fa: F[A])(f: A => B): F[B]
 }
 
 type class Applicative[F[_]] : Functor[F] {
-  def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
+  extension def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B]
   def pure[A](a: A): F[A]
 
-  override def map[A, B](this fa: F[A])(f: A => B): F[B] =
+  override extension def map[A, B](this fa: F[A])(f: A => B): F[B] =
     ap(fa)(pure(f))
 }
 
 type class Monad[F[_]] : Applicative[F] {
-  def flatMap[A, B](this fa: F[A])(f: A => F[B]): F[B]
+  extension def flatMap[A, B](this fa: F[A])(f: A => F[B]): F[B]
 
-  override def map[A, B](this fa: F[A])(f: A => B): F[B] =
+  override extension  def map[A, B](this fa: F[A])(f: A => B): F[B] =
     flatMap(fa)(a => pure(f(a)))
 
-  override def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B] =
+  override extension  def ap[A, B](this fa: F[A])(ff: F[A => B]): F[B] =
     flatMap(ff)(f => map(fa)(f))
 }
 ```
@@ -177,8 +177,8 @@ We will look into those in detail in a later section, for now let's look at an e
 
 ```scala
 type class Collection[C, E] {
-  def insert(this collection: C)(elem: E): C
-  def contains(this collection: C)(elem: E): Boolean
+  extension def insert(this collection: C)(elem: E): C
+  extension def contains(this collection: C)(elem: E): Boolean
 }
 ```
 
@@ -190,7 +190,7 @@ For example we might want to require our `C` type to form a `Monoid` and our `E`
 
 ```scala
 type class Collection[C, E] : Monoid[C] : Eq[E] {
-  def insert(this collection: C)(elem: E): C
-  def contains(this collection: C)(elem: E): Boolean
+  extension def insert(this collection: C)(elem: E): C
+  extension def contains(this collection: C)(elem: E): Boolean
 }
 ```
