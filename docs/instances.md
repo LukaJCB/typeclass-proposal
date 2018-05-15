@@ -151,14 +151,24 @@ type class Collection[C, E] {
 
 Now imagine we add an instance of `Collection[String, Char]` inside the `String` companion object.
 Then someone else defines an instance of `Collection[CharList, Char]` in another package where `String` isn't in scope.
-Then, when we try to use both packages together and ask for an instance of `Collection[_, Char]`, the compiler can't know which one we want, thereby breaking coherence.
+Then, when we try to use both packages together and ask for an instance of `Collection[_, Char]`, the compiler can't know which one we want, thereby forcing us to specify both types as to not break coherence.
 
 Other languages overcome this problem with one of two techniques, functional dependencies or associated types.
 Both of these solutions function by introducing a concept of determining a type by another.
 For example, in the `Collection` type class above, the collection type always determines which type of element can be stored inside.
 We say that `E` is uniquely determined by `C`.
 
+In Rust only associated types are available and one can do something very similar in Scala with path dependent types. [Here](https://doc.rust-lang.org/book/first-edition/associated-types.html) is an article that describes the motivation and usage of associated types in Rust.
+
+This [article by Miles Sabin](https://milessabin.com/blog/2011/07/16/fundeps-in-scala/) gives a good overview of how functional dependencies currently work in Scala and how they are currently used in the collections library. 
+
 
 One compromise without bringing in full on support for functional dependencies could be to let the first parameter of the type class in question determine all other parameters.
+In that case you would only be able to place instances in the companion object of the first parameter's type or the companion object of the type class itself.
 
-//TODO More detail
+Another approach could be to keep things as they are when using implicit based type classes, so that you can define instances for each set of types.
+In which case it instances could go in either of type's companion objects or again the companion of the type class.
+
+We should also mention bidirectional functional dependencies, though they are very rare and thus, do not need direct support in this proposal.
+
+//TODO Decide on a scheme.
