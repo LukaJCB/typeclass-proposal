@@ -93,7 +93,7 @@ type class Hash[A] : Eq[A] {
 Adelbert Chang wrote a paper describing in great detail why subtyping for type classes is a suboptimal approach.
 You can find this paper [here](https://adelbertc.github.io/publications/typeclasses-scala17.pdf).
 
-Of course it should also be to imply multiple other type classes:
+Of course it should also be possible to require multiple other type classes:
 
 ```scala
 type class CommutativeSemigroup[A] : Semigroup[A] {
