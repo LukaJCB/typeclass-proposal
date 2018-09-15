@@ -32,7 +32,7 @@ We can also define type classes inductively, for example an `Option[A]` is a `Se
 ```scala
 extension optionSemigroup[A: Semigroup] : new Semigroup[Option[A]] {
   def combine(this x: Option[A])(y: Option[A]): Option[A] = (x, y) match {
-    case (Some(a), Some(b)) => a.combine(b)
+    case (Some(a), Some(b)) => Some(a.combine(b))
     case (_, _) => None
   }
 }
